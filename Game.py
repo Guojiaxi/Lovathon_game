@@ -40,7 +40,7 @@ if __name__ == '__main__':
         for bullet in bullets:
             all_sprites.add(bullet)
             bullet.move()
-
+            print(bullet.hitbox.center,bullet.rect.center)
         #draw
 
         all_sprites.draw(screen)
