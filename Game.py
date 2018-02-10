@@ -1,32 +1,14 @@
 from math import *
 import pygame, os
+from entities import *
+from globalvars import *
 
-class Player(object):
-    def __init__(self):
-        self.box = pygame.Rect(width/2, height/2, 50, 50)
-
-    def move(self, dx, dy):
-        if dx != 0 or dy != 0:
-            self.move_xy(dx, dy)
-
-    def move_xy(self, dx, dy):
-        self.box.move_ip(dx,0)
-        self.box.move_ip(0,dy)
-
-
-
-
-os.environ["SDL_VIDEO_CENTERED"] = "1"
+os.environ["SDL_VIDEO_CENTERED"] = "1" #center the window to the center of the screen.
 pygame.init()
 running = True
 
-width = 800
-height = 608
 screen = pygame.display.set_mode((width,height))
 pygame.display.set_caption("game")
-
-white = (255,255,255) #RGB
-black = (0,0,0)
 
 clock = pygame.time.Clock()
 player = Player()
