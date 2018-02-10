@@ -38,8 +38,8 @@ class Player(pygame.sprite.Sprite):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
-    def shoot(self,index,key,current_position,bullets):
-        bullets.append(PlayerBullet(index,start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+    def shoot(self,current_position,bullets):
+        bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
 
     def is_hit(self):
         for thing in bullets:
@@ -67,9 +67,8 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = kwargs.get("speed",7)
 
 class PlayerBullet(Bullet):
-    def __init__(self,index,**kwargs):
+    def __init__(self,**kwargs):
         Bullet.__init__(self,**kwargs)
-        self.index = index
         self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
         pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()

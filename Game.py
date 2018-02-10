@@ -36,13 +36,16 @@ if __name__ == '__main__':
         player.move(key)
 
         if key[pygame.K_z]:
-            player.shoot(len(bullets),key,player.box.center,bullets)
+            player.shoot(player.box.center,bullets)
 
         # movement of other entities
         for bullet in bullets:
             all_sprites.add(bullet)
             bullet.move()
             print(bullet.hitbox.center,bullet.rect.center)
+
+        for enemy in enemies:
+            enemy.move()
         #draw
 
         all_sprites.draw(screen)
