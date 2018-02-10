@@ -3,34 +3,36 @@ import pygame, os
 from entities import *
 from globalvars import *
 
-os.environ["SDL_VIDEO_CENTERED"] = "1" #center the window to the center of the screen.
-pygame.init()
-running = True
+if __name__ == '__main__':
 
-screen = pygame.display.set_mode((width,height))
-pygame.display.set_caption("game")
+    os.environ["SDL_VIDEO_CENTERED"] = "1" #center the window to the center of the screen.
+    pygame.init()
+    running = True
 
-clock = pygame.time.Clock()
-player = Player()
+    screen = pygame.display.set_mode((width,height))
+    pygame.display.set_caption("game")
 
-while running:
+    clock = pygame.time.Clock()
+    player = Player()
 
-    clock.tick(60)
-    screen.fill(white)
-    pygame.draw.rect(screen, black, player.box, 0)
+    while running:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+        clock.tick(60)
+        screen.fill(white)
+        pygame.draw.rect(screen, black, player.box, 0)
 
-    # basic movement
-    key = pygame.key.get_pressed()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        # basic movement
+        key = pygame.key.get_pressed()
    
-    player.move(key)
+        player.move(key)
 
-    #draw
-    pygame.display.flip()
+        #draw
+        pygame.display.flip()
 
 
 
-pygame.quit()
+    pygame.quit()
