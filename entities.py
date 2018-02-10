@@ -1,5 +1,6 @@
 import pygame
 from globalvars import *
+
 class Player(object):
     def __init__(self, **kwargs):
         self.box = pygame.Rect(width/2, height/2, kwargs.get("width",50), kwargs.get("height",50))
@@ -31,13 +32,14 @@ class Player(object):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
-    def shoot(self,key,current_position,bullets):
-        if key[pygame.K_z]:
-            bullets.append(PlayerBullet(start_pos=current_position, speed=15))
+    def shoot(self,current_position,bullets):
+        bullets.append(PlayerBullet(start_pos=current_position, speed=15))
 
 class Enemy(object):
     def __init__(self, **kwargs):
-        self.box = pygame.Rect(width/2, height/2,)
+        self.box = pygame.Rect(kwargs.get("start_pos",(width/2,0)),kwargs.get("size",(50,50)))
+        enemies.append
+
   
 class Bullet(object):
     def __init__(self,**kwargs):

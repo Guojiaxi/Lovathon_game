@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     while running:
 
-        clock.tick(60)
+        clock.tick(50)
         screen.fill(white)
         pygame.draw.rect(screen, black, player.box, 0)
 
@@ -31,7 +31,9 @@ if __name__ == '__main__':
         key = pygame.key.get_pressed()
    
         player.move(key)
-        player.shoot(key,player.box.center,bullets)
+
+        if key[pygame.K_z]:
+            player.shoot(key,player.box.center,bullets)
 
         # movement of other entities
         for bullet in bullets:
