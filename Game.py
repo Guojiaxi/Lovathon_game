@@ -14,6 +14,8 @@ if __name__ == '__main__':
 
     clock = pygame.time.Clock()
     player = Player()
+    bullets = []
+    enemies = []
 
     while running:
 
@@ -29,6 +31,12 @@ if __name__ == '__main__':
         key = pygame.key.get_pressed()
    
         player.move(key)
+        player.shoot(key,player.box.center,bullets)
+
+        # movement of other entities
+        for bullet in bullets:
+            pygame.draw.rect(screen, black, bullet.hitbox, 0)
+            bullet.move()
 
         #draw
         pygame.display.flip()
