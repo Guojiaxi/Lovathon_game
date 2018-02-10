@@ -31,7 +31,9 @@ class Player(object):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
-    def shoot(self):
+    def shoot(self,key,current_position,bullets):
+        if key[pygame.K_z]:
+            bullets.append(PlayerBullet(start_pos=current_position, speed=15))
 
 class Enemy(object):
     def __init__(self, **kwargs):
@@ -39,12 +41,18 @@ class Enemy(object):
   
 class Bullet(object):
     def __init__(self,**kwargs):
-        pass
-        
+        self.hitbox = pygame.Rect(kwargs.get("start_pos",(0,0)),kwargs.get("size",(10,10)))
+        self.speed = kwargs.get("speed",7)
 
 class PlayerBullet(Bullet):
-    def __init__(self):
-        super(Bullet,self).__init__()
+    def __init__(self,**kwargs):
+        Bullet.__init__(self,**kwargs)
+
+    def move(self):
+        if self.hitbox.bottom >= 0:
+            self.hitbox.move_ip(0,-self.speed)
+        else:
+            del self
 
 class EnemyBullet(Bullet):
     def __init__(self):
