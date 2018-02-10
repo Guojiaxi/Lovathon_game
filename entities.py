@@ -5,7 +5,7 @@ from Game import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, **kwargs):
         super().__init__()
-        self.image = pygame.image.load("/home/ceongh/Lovathon_game/resources/GOLD.png").convert_alpha()
+        self.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
         pygame.draw.rect(self.image,white,[1,1,1,1])
         self.rect = self.image.get_rect()
         self.box = self.rect
@@ -38,28 +38,35 @@ class Player(pygame.sprite.Sprite):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
-    def shoot(self,key,current_position,bullets):
+    def shoot(self,index,key,current_position,bullets):
         if key[pygame.K_z]:
-            bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+            bullets.append(PlayerBullet(index,start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
 
 class Enemy(object):
     def __init__(self, **kwargs):
         self.box = pygame.Rect(width/2, height/2,)
   
-class Bullet(object):
+class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
+        super().__init__()
         self.hitbox = pygame.Rect(kwargs.get("start_pos",(0,0)),kwargs.get("size",(10,10)))
+
         self.speed = kwargs.get("speed",7)
 
 class PlayerBullet(Bullet):
-    def __init__(self,**kwargs):
+    def __init__(self,index,**kwargs):
         Bullet.__init__(self,**kwargs)
+        self.index = index
+        self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
+        pygame.draw.rect(self.image,white,self.hitbox)
+        self.rect = self.image.get_rect()
+
 
     def move(self):
-        if self.hitbox.bottom >= 0:
-            self.hitbox.move_ip(0,-self.speed)
+        if self.rect.bottom >= 0:
+            self.rect.move_ip(0,-self.speed)
         else:
-            del self
+            bullets.remove(self)
 
 class EnemyBullet(Bullet):
     def __init__(self):
