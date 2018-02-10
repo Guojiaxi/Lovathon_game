@@ -16,7 +16,7 @@ player = Player()
 while running:
 
     clock.tick(60)
-    screen.fillplayer.move(white)
+    screen.fill(white)
     pygame.draw.rect(screen, black, player.box, 0)
 
     for event in pygame.event.get():
