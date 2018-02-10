@@ -31,10 +31,20 @@ class Player(object):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
+    def shoot(self):
+
 class Enemy(object):
     def __init__(self, **kwargs):
         self.box = pygame.Rect(width/2, height/2,)
   
 class Bullet(object):
     def __init__(self,**kwargs):
-        pass
+        
+
+class PlayerBullet(Bullet):
+    def __init__(self):
+        super(Bullet,self).__init__()
+
+class EnemyBullet(Bullet):
+    def __init__(self):
+        super(Bullet,self).__init__()
