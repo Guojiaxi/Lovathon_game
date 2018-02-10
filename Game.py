@@ -1,17 +1,43 @@
 from math import *
 import pygame, os
 
+class Bullet(object):
+    def __init__(self,**kwargs):
+        pass
+
+
+
 class Player(object):
     def __init__(self):
         self.box = pygame.Rect(width/2, height/2, 50, 50)
+        self.speed = 6
 
-    def move(self, dx, dy):
-        if dx != 0 or dy != 0:
-            self.move_xy(dx, dy)
+    def move(self,key):
+        if key[pygame.K_LSHIFT]:
+            self.speed = 3
+        else:
+            self.speed = 6
+
+        if key[pygame.K_LEFT]:
+            if self.box.left >= 0:
+                self.move_xy(-self.speed, 0)
+
+        if key[pygame.K_RIGHT]:
+            if self.box.right <= width:
+                self.move_xy(self.speed, 0)
+
+        if key[pygame.K_UP]:
+            if self.box.top >= 0:
+                self.move_xy(0, -self.speed)
+
+        if key[pygame.K_DOWN]:
+            if self.box.bottom <= height:
+                self.move_xy(0, self.speed)
 
     def move_xy(self, dx, dy):
-        self.box.move_ip(dx,0)
-        self.box.move_ip(0,dy)
+        if dx != 0 or dy != 0:
+            self.box.move_ip(dx, 0)
+            self.box.move_ip(0, dy)
 
 
 
@@ -31,8 +57,6 @@ black = (0,0,0)
 clock = pygame.time.Clock()
 player = Player()
 
-speed = 5
-
 while running:
 
     clock.tick(60)
@@ -46,21 +70,7 @@ while running:
 
     # basic movement
     key = pygame.key.get_pressed()
-    if key[pygame.K_LEFT]:
-        if player.box.left >= 0:
-            player.move(-speed,0)
-
-    if key[pygame.K_RIGHT]:
-        if player.box.right <= width:
-            player.move(speed,0)
-
-    if key[pygame.K_UP]:
-        if player.box.top >= 0:
-            player.move(0,-speed)
-
-    if key[pygame.K_DOWN]:
-        if player.box.bottom <= height:
-            player.move(0,speed)
+    player.move(key)
 
     #draw
     pygame.display.flip()
