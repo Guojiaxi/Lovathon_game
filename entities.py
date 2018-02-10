@@ -1,10 +1,16 @@
-import pygame
+import pygame,os
 from globalvars import *
+from Game import *
 
-class Player(object):
+class Player(pygame.sprite.Sprite):
     def __init__(self, **kwargs):
-        self.box = pygame.Rect(width/2, height/2, kwargs.get("width",50), kwargs.get("height",50))
-        
+        super().__init__()
+        self.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
+        pygame.draw.rect(self.image,white,[1,1,1,1])
+        self.rect = self.image.get_rect()
+        self.box = self.rect
+
+        print(self.rect.left,self.rect.right)
     def move(self,key):
         if key[pygame.K_LSHIFT]:
             self.speed = 3
@@ -32,8 +38,8 @@ class Player(object):
             self.box.move_ip(dx, 0)
             self.box.move_ip(0, dy)
 
-    def shoot(self,current_position,bullets):
-        bullets.append(PlayerBullet(start_pos=current_position, speed=15))
+    def shoot(self,index,key,current_position,bullets):
+        bullets.append(PlayerBullet(index,start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
 
 class Enemy(object):
     def __init__(self, **kwargs):
@@ -41,20 +47,27 @@ class Enemy(object):
         enemies.append
 
   
-class Bullet(object):
+class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
+        super().__init__()
         self.hitbox = pygame.Rect(kwargs.get("start_pos",(0,0)),kwargs.get("size",(10,10)))
+
         self.speed = kwargs.get("speed",7)
 
 class PlayerBullet(Bullet):
-    def __init__(self,**kwargs):
+    def __init__(self,index,**kwargs):
         Bullet.__init__(self,**kwargs)
+        self.index = index
+        self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
+        pygame.draw.rect(self.image,white,self.hitbox)
+        self.rect = self.image.get_rect()
+
 
     def move(self):
-        if self.hitbox.bottom >= 0:
-            self.hitbox.move_ip(0,-self.speed)
+        if self.rect.bottom >= 0:
+            self.rect.move_ip(0,-self.speed)
         else:
-            del self
+            bullets.remove(self)
 
 class EnemyBullet(Bullet):
     def __init__(self):
