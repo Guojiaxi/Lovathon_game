@@ -73,20 +73,27 @@ class PlayerBullet(Bullet):
         self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
         pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()
-
+        self.rect.center = self.hitbox.center
 
     def move(self):
-        if self.rect.bottom >= 0:
+        if self.rect.bottom >= 0 and self.hitbox.bottom >=0:
             self.rect.move_ip(0,-self.speed)
+            self.hitbox.move_ip(0,-self.speed)
         else:
             bullets.remove(self)
 
 class EnemyBullet(Bullet):
     def __init__(self,index,**kwargs):
         Bullet.__init__(self,**kwargs)
+        self.index = index
+        self.image = pygame.image.load(os.path.join("resources","BadBullet.png")).convert_alpha()
+        pygame.draw.rect(self.image,white,self.hitbox)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.hitbox.center
 
     def move(self):
-        if self.rect.bottom >= 0:
+        if self.rect.bottom >= 0 and self.hitbox.bottom >=0:
             self.rect.move_ip(0,-self.speed)
+            self.hitbox.move_ip(0,-self.speed)
         else:
             bullets.remove(self)
