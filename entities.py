@@ -39,6 +39,7 @@ class Enemy(object):
   
 class Bullet(object):
     def __init__(self,**kwargs):
+        pass
         
 
 class PlayerBullet(Bullet):
