@@ -33,7 +33,7 @@ class Player(object):
 
 class Enemy(object):
     def __init__(self, **kwargs):
-        self.box = pygame.Rect(width/2,height/2,)
+        self.box = pygame.Rect(width/2, height/2,)
   
 class Bullet(object):
     def __init__(self,**kwargs):
