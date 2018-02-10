@@ -23,12 +23,13 @@ if __name__ == '__main__':
 
         clock.tick(60)
         screen.fill(white)
-        all_sprites.draw(screen)
         #print(bullets)
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        
+
         # basic movement
         key = pygame.key.get_pressed()
 
@@ -41,6 +42,8 @@ if __name__ == '__main__':
             bullet.move()
 
         #draw
+
+        all_sprites.draw(screen)
         pygame.display.flip()
 
 

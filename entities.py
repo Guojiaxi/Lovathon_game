@@ -60,7 +60,7 @@ class PlayerBullet(Bullet):
         self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
         pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()
-
+        self.rect.center = self.hitbox.center
 
     def move(self):
         if self.rect.bottom >= 0:
