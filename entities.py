@@ -1,9 +1,16 @@
-import pygame
+import pygame,os
 from globalvars import *
-class Player(object):
+from Game import *
+
+class Player(pygame.sprite.Sprite):
     def __init__(self, **kwargs):
-        self.box = pygame.Rect(width/2, height/2, kwargs.get("width",50), kwargs.get("height",50))
-        
+        super().__init__()
+        self.image = pygame.image.load("/home/ceongh/Lovathon_game/resources/GOLD.png").convert_alpha()
+        pygame.draw.rect(self.image,white,[1,1,1,1])
+        self.rect = self.image.get_rect()
+        self.box = self.rect
+
+        print(self.rect.left,self.rect.right)
     def move(self,key):
         if key[pygame.K_LSHIFT]:
             self.speed = 3
@@ -33,7 +40,7 @@ class Player(object):
 
     def shoot(self,key,current_position,bullets):
         if key[pygame.K_z]:
-            bullets.append(PlayerBullet(start_pos=current_position, speed=15))
+            bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
 
 class Enemy(object):
     def __init__(self, **kwargs):
