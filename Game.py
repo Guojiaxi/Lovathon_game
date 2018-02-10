@@ -13,16 +13,6 @@ class Player(object):
         self.box.move_ip(dx,0)
         self.box.move_ip(0,dy)
 
-        for wall in walls: # COLLISION DETECTION
-            if self.box.colliderect(wall.box):
-                if dx > 0:  # Moving right; Hit the left side of the wall
-                    self.box.right = wall.box.left
-                if dx < 0:  # Moving left; Hit the right side of the wall
-                    self.box.left = wall.box.right
-                if dy > 0:  # Moving down; Hit the top side of the wall
-                    self.box.bottom = wall.box.top
-                if dy < 0:  # Moving up; Hit the bottom side of the wall
-                    self.box.top = wall.box.bottom
 
 
 
@@ -43,12 +33,12 @@ player = Player()
 
 speed = 5
 
-for x in range(0,width,16):
-    walls.append(Wall([x,0],16,16))
-
 while running:
 
     clock.tick(60)
+
+    screen.fill(white)
+    pygame.draw.rect(screen, black, player.box, 0)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -57,19 +47,22 @@ while running:
     # basic movement
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        player.move(-speed,0)
+        if player.box.left >= 0:
+            player.move(-speed,0)
+
     if key[pygame.K_RIGHT]:
-        player.move(speed,0)
+        if player.box.right <= width:
+            player.move(speed,0)
+
     if key[pygame.K_UP]:
-        player.move(0,-speed)
+        if player.box.top >= 0:
+            player.move(0,-speed)
+
     if key[pygame.K_DOWN]:
-        player.move(0,speed)
+        if player.box.bottom <= height:
+            player.move(0,speed)
 
     #draw
-    screen.fill(white)
-    for wall in walls:
-        pygame.draw.rect(screen, (128,128,128), wall.box, 0)
-    pygame.draw.rect(screen, black, player.box, 0)
     pygame.display.flip()
 
 
