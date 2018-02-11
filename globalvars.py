@@ -10,4 +10,4 @@ white = (255,255,255) #RGB
 black = (0,0,0)
 bullets = []
 enemies = []
-move_pat = {1: figure_eight, 2: circular}
+move_pat = {1: figure_eight, 2: circular,3: loops}

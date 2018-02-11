@@ -22,6 +22,8 @@ if __name__ == '__main__':
     pygame.display.set_caption("game")
     background = Background(os.path.join("resources","Background.png"),(0,0))
 
+
+
     player = Player()
 
     all_sprites.add(player)
