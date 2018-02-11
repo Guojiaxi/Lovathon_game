@@ -1,6 +1,14 @@
-import pygame,os
+import pygame,os,random
 from globalvars import *
 from math import *
+from move_patterns import *
+
+class Background(pygame.sprite.Sprite):
+    def __init__(self, image_file, location):
+        pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
+        self.image = pygame.image.load(image_file)
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = location
 
 class Body(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
@@ -17,6 +25,7 @@ class Player(Body):
         self.rect = self.image.get_rect()
         self.rect.center = self.hitbox.center
         self.rect.center = (width / 2, height / 2)
+        self.dead = False
         self.shoot_timer = 60/6
 
 
@@ -57,16 +66,18 @@ class Player(Body):
                 all_sprites.remove(thing)
                 bullets.remove(thing)
                 self.image = pygame.image.load(os.path.join("resources", "GOLDDEAD.png")).convert_alpha()
-
-
-
                 # player needs to die or lose a life
                 # explosion animation
+        for enemy in enemies:
+            if self.hitbox.colliderect(enemy.hitbox):
+                # me ded
+                pass
 
     def collision(self):
         for thing in enemies:
             if self.rect.colliderect(thing.rect):
                 self.image = pygame.image.load(os.path.join("resources","GOLDDEAD.png")).convert_alpha()
+                self.dead = True
 
 
 class Enemy(Body):
@@ -78,6 +89,15 @@ class Enemy(Body):
         self.rect.center = kwargs.get("start_pos",(0,0))
         self.shoot_timer = 60/3
         enemies.append(self)
+        self.pattern = random.randint(1,len(move_pat))
+        self.t = 0
+        self.nature = random.randint(0,2)
+
+    def move(self):
+        (dx,dy) = move_pat[self.pattern](self.t)
+        self.rect.move_ip(dx, 0)
+        self.rect.move_ip(0, dy)
+        self.t += (-1)**self.nature
 
     def is_hit(self):
         for thing in bullets:
@@ -89,10 +109,7 @@ class Enemy(Body):
 
     def shoot(self,currentpos,target):
         bullets.append(EnemyBullet(start_pos=currentpos,speed = 50,target=target))
-
-    def move(self):
-        pass
-
+        
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
         super().__init__()
