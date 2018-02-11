@@ -2,6 +2,12 @@ import pygame,os,random
 from globalvars import *
 from move_patterns import *
 
+class Background(pygame.sprite.Sprite):
+    def __init__(self, image_file, location):
+        pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
+        self.image = pygame.image.load(image_file)
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = location
 
 class Body(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
@@ -18,6 +24,7 @@ class Player(Body):
         self.rect = self.image.get_rect()
         self.rect.center = self.hitbox.center
         self.rect.center = (width / 2, height / 2)
+        self.dead = False
         self.shoot_timer = 60/6
 
 
@@ -69,6 +76,7 @@ class Player(Body):
         for thing in enemies:
             if self.rect.colliderect(thing.rect):
                 self.image = pygame.image.load(os.path.join("resources","GOLDDEAD.png")).convert_alpha()
+                self.dead = True
 
 
 class Enemy(Body):

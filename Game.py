@@ -4,13 +4,14 @@ import random
 from entities import *
 from globalvars import *
 
-class Background(pygame.sprite.Sprite):
-    def __init__(self, image_file, location):
-        pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
-        self.image = pygame.image.load(image_file)
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = location
-
+def wait():
+    while (True):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                return
 
 if __name__ == '__main__':
 
@@ -18,11 +19,17 @@ if __name__ == '__main__':
     pygame.init()
     running = True
 
+
+
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption("game")
+    background = Background(os.path.join("resources","Bloodinmyheart.png"),(0,0))
+
+    screen.blit(background.image, background.rect)
+    pygame.display.update()
+    wait()
+
     background = Background(os.path.join("resources","Background.png"),(0,0))
-
-
 
     player = Player()
 
@@ -35,6 +42,8 @@ if __name__ == '__main__':
         screen.blit(background.image,background.rect)
         #print(bullets)
         player.collision()
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -42,6 +51,7 @@ if __name__ == '__main__':
 
         # basic movement
         key = pygame.key.get_pressed()
+
         if (key[pygame.K_5]):
             all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,3*height//5))))
 
@@ -68,6 +78,16 @@ if __name__ == '__main__':
         
         #draw
         print(len(enemies),len(bullets),len(all_sprites),player.rect.center)
+        if player.dead:
+            background = Background(os.path.join("resources","GAMEOVER.png"),(0,0))
+            screen.blit(background.image, background.rect)
+            pygame.display.update()
+            wait()
+            player.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
+            background = Background(os.path.join("resources","Background.png"),(0,0))
+
+            player.dead = False
+            
         all_sprites.draw(screen)
         pygame.display.flip()
 
