@@ -46,8 +46,8 @@ if __name__ == '__main__':
         key = pygame.key.get_pressed()
         if (key[pygame.K_5]):
             all_sprites.add(testenemy)
+            
         player.move(key)
-        player.shoot(len(bullets),key,player.rect.center,bullets)
 
         player.move(pygame.key.get_pressed())
         if pygame.key.get_pressed()[pygame.K_z]:

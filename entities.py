@@ -51,10 +51,12 @@ class Player(Body):
 
     def is_hit(self):
         for thing in bullets:
-            if thing is EnemyBullet and self.box.colliderect(thing.hitbox):
+            if thing is EnemyBullet and self.hitbox.colliderect(thing.hitbox):
                 del bullets[bullets.index(thing)]
                 # player needs to die or lose a life
                 # explosion animation
+        for enemy in enemies:
+            if self.hitbox.colliderect(enemy.hitbox)
 
 class Enemy(Body):
     def __init__(self, **kwargs):
@@ -66,7 +68,7 @@ class Enemy(Body):
 
     def is_hit(self):
         for thing in bullets:
-            if thing is PlayerBullet and self.box.colliderect(thing.hitbox):
+            if thing is PlayerBullet and self.hitbox.colliderect(thing.hitbox):
                 enemies.remove(self)
                 bullets.remove(thing)
   
