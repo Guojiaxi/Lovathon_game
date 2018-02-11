@@ -62,6 +62,13 @@ if __name__ == '__main__':
         for enemy in enemies:
             enemy.move()
             enemy.is_hit()
+
+        for enemy in enemies:
+            if enemy.shoot_timer:
+                enemy.shoot_timer -= 1
+            else:
+                enemy.shoot(enemy.rect.center, player.rect.center)
+                enemy.shoot_timer = 60/6
         
         #draw
         print(len(enemies),len(bullets),len(all_sprites),player.rect.center)
