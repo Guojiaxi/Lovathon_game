@@ -41,7 +41,7 @@ if __name__ == '__main__':
         # basic movement
         key = pygame.key.get_pressed()
         if (key[pygame.K_5]):
-            all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,height))))
+            all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,3*height//5))))
 
         player.move(key)
 

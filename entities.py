@@ -79,15 +79,15 @@ class Enemy(Body):
         self.rect = self.image.get_rect()
         self.rect.center = kwargs.get("start_pos",(0,0))
         enemies.append(self)
-        self.pattern = 1
+        self.pattern = random.randint(1,len(move_pat))
         self.t = 0
+        self.nature = random.randint(0,2)
 
     def move(self):
         (dx,dy) = move_pat[self.pattern](self.t)
         self.rect.move_ip(dx, 0)
         self.rect.move_ip(0, dy)
-        self.t += 1
-
+        self.t += (-1)**self.nature
 
     def is_hit(self):
         for thing in bullets:
@@ -96,9 +96,6 @@ class Enemy(Body):
                 enemies.remove(self)
                 all_sprites.remove(thing)
                 bullets.remove(thing)
-
-    def move(self):
-        pass
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
