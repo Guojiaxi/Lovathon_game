@@ -13,11 +13,10 @@ class Player(Body):
         Body.__init__(self,**kwargs)
         self.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
         self.rect = self.image.get_rect()
+
         self.rect.center = (width / 2, height / 2)
         pygame.draw.rect(self.image,white,self.hitbox)
-        print(self.image,self.rect,self.rect.left,self.rect.right,self.rect.center)
-
-        #elf.box = self.rect
+        self.shoot_timer = 60/6
 
 
     def move(self,key):
@@ -47,9 +46,15 @@ class Player(Body):
             self.rect.move_ip(dx, 0)
             self.rect.move_ip(0, dy)
 
-    def shoot(self,index,key,current_position,bullets):
-        if key[pygame.K_z]:
-            bullets.append(PlayerBullet(index,start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+    def shoot(self,current_position,bullets):
+        bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+
+    def is_hit(self):
+        for thing in bullets:
+            if thing is EnemyBullet and self.box.colliderect(thing.hitbox):
+                del bullets[bullets.index(thing)]
+                # player needs to die or lose a life
+                # explosion animation
 
 class Enemy(Body):
     def __init__(self, **kwargs):
@@ -57,6 +62,13 @@ class Enemy(Body):
         self.image = pygame.image.load(os.path.join("resources", "BAD.png")).convert_alpha()
         pygame.draw.rect(self.image, white, self.hitbox)
         self.rect = self.image.get_rect()
+        enemies.append(self)
+
+    def is_hit(self):
+        for thing in bullets:
+            if thing is PlayerBullet and self.box.colliderect(thing.hitbox):
+                enemies.remove(self)
+                bullets.remove(thing)
   
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
@@ -66,9 +78,8 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = kwargs.get("speed",7)
 
 class PlayerBullet(Bullet):
-    def __init__(self,index,**kwargs):
+    def __init__(self,**kwargs):
         Bullet.__init__(self,**kwargs)
-        self.index = index
         self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
         pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()
