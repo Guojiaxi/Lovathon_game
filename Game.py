@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption("game")
-    background = Background(os.path.join("resources","background.png"),(0,0))
+    background = Background(os.path.join("resources","Background.png"),(0,0))
 
     clock = pygame.time.Clock()
     player = Player()
@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
         clock.tick(60)
         screen.fill(white)
-        screen.blit(background.image,(0,0))
+        screen.blit(background.image,background.rect)
         #print(bullets)
 
         for event in pygame.event.get():
