@@ -31,9 +31,9 @@ class Player(Body):
 
     def move(self,key):
         if key[pygame.K_LSHIFT]:
-            self.speed = 3
+            self.speed = 2
         else:
-            self.speed = 6
+            self.speed = 4
 
         if key[pygame.K_LEFT]:
             if self.rect.left >= 0:
