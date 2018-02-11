@@ -23,7 +23,7 @@ if __name__ == '__main__':
 
     clock = pygame.time.Clock()
     player = Player()
-    testenemy = Enemy(start_pos=(100,100), size=(1,1))
+    testenemy = Enemy(start_pos=(width/2,height/2), size=(1,1))
 
     enemies.append(testenemy)
 
@@ -46,15 +46,15 @@ if __name__ == '__main__':
         key = pygame.key.get_pressed()
         if (key[pygame.K_5]):
             all_sprites.add(testenemy)
-            
+
         player.move(key)
 
         player.move(pygame.key.get_pressed())
+        if player.shoot_timer:
+            player.shoot_timer -= 1
         if pygame.key.get_pressed()[pygame.K_z]:
-            if player.shoot_timer:
-                player.shoot_timer -= 1
-            else:
-                player.shoot(player.box.center, bullets)
+            if not player.shoot_timer:
+                player.shoot(player.rect.center, bullets)
                 player.shoot_timer = 60/6
 
 

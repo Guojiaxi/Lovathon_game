@@ -1,5 +1,6 @@
-import pygame,os
+import pygame,os,random
 from globalvars import *
+from move_patterns import *
 
 
 class Body(pygame.sprite.Sprite):
@@ -56,7 +57,9 @@ class Player(Body):
                 # player needs to die or lose a life
                 # explosion animation
         for enemy in enemies:
-            if self.hitbox.colliderect(enemy.hitbox)
+            if self.hitbox.colliderect(enemy.hitbox):
+                # me ded
+                pass
 
 class Enemy(Body):
     def __init__(self, **kwargs):
@@ -65,6 +68,15 @@ class Enemy(Body):
         pygame.draw.rect(self.image, white, self.hitbox)
         self.rect = self.image.get_rect()
         enemies.append(self)
+        self.pattern = 1
+        self.t = 0
+
+    def move(self):
+        (dx,dy) = move_pat[self.pattern](self.t)
+        self.rect.move_ip(dx, 0)
+        self.rect.move_ip(0, dy)
+        self.t += 1
+
 
     def is_hit(self):
         for thing in bullets:
