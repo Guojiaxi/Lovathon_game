@@ -9,6 +9,7 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(self.image,white,[1,1,1,1])
         self.rect = self.image.get_rect()
         self.box = self.rect
+        self.shoot_timer = 60/6
 
         print(self.rect.left,self.rect.right)
     def move(self,key):
@@ -43,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
     def is_hit(self):
         for thing in bullets:
-            if self.box.colliderect(thing.hitbox):
+            if thing is EnemyBullet and self.box.colliderect(thing.hitbox):
                 del bullets[bullets.index(thing)]
                 # player needs to die or lose a life
                 # explosion animation
