@@ -1,5 +1,6 @@
 import pygame,os,random
 from globalvars import *
+from math import *
 from move_patterns import *
 
 class Background(pygame.sprite.Sprite):
@@ -60,7 +61,7 @@ class Player(Body):
 
     def is_hit(self):
         for thing in bullets:
-            if thing is EnemyBullet and self.rect.colliderect(thing.rect):
+            if self.rect.colliderect(thing.rect):
 
                 all_sprites.remove(thing)
                 bullets.remove(thing)
@@ -86,6 +87,7 @@ class Enemy(Body):
         #pygame.draw.rect(self.image, white, self.hitbox)
         self.rect = self.image.get_rect()
         self.rect.center = kwargs.get("start_pos",(0,0))
+        self.shoot_timer = 60/3
         enemies.append(self)
         self.pattern = random.randint(1,len(move_pat))
         self.t = 0
@@ -105,6 +107,9 @@ class Enemy(Body):
                 all_sprites.remove(thing)
                 bullets.remove(thing)
 
+    def shoot(self,currentpos,target):
+        bullets.append(EnemyBullet(start_pos=currentpos,speed = 50,target=target))
+        
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
         super().__init__()
@@ -130,18 +135,29 @@ class PlayerBullet(Bullet):
             bullets.remove(self)
 
 class EnemyBullet(Bullet):
-    def __init__(self,index,**kwargs):
+    def __init__(self,**kwargs):
         Bullet.__init__(self,**kwargs)
-        self.index = index
+        self.speed = 3
+        self.target = kwargs.get("target",(0,0))
         self.image = pygame.image.load(os.path.join("resources","BadBullet.png")).convert_alpha()
         pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()
         self.rect.center = self.hitbox.center
+        self.players = False
+
+        self.x_slope = self.target[0] - self.rect.center[0]
+        self.y_slope = self.target[1] - self.rect.center[1]
+        max_factor = max(self.x_slope,self.y_slope)
+        self.x_slope /= max_factor
+        self.y_slope /= max_factor
+        #self.slope = self.y_slope/self.x_slope
+        #self.angle = atan(self.slope)
 
     def move(self):
-        if self.rect.bottom >= 0 and self.hitbox.bottom >=0:
-            self.rect.move_ip(0,-self.speed)
-            self.hitbox.move_ip(0,-self.speed)
+        if self.rect.bottom >= 0 and self.rect.top <= height and self.rect.left >=0 and self.rect.right <= width:
+            #self.rect.move_ip(0,-self.speed)
+            #self.hitbox.move_ip(0,-self.speed)
+            self.rect.move_ip(self.speed*self.x_slope,self.speed*self.y_slope)
         else:
             all_sprites.remove(self)
             bullets.remove(self)
