@@ -15,6 +15,9 @@ if __name__ == '__main__':
 
     clock = pygame.time.Clock()
     player = Player()
+    testenemy = Enemy(start_pos=(100,100), size=(1,1))
+
+    enemies.append(testenemy)
 
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
@@ -23,8 +26,8 @@ if __name__ == '__main__':
 
         clock.tick(60)
         screen.fill(white)
+        pygame.draw.rect(screen,black,[0,0,10,10])
         #print(bullets)
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,15 +35,15 @@ if __name__ == '__main__':
 
         # basic movement
         key = pygame.key.get_pressed()
-
+        if (key[pygame.K_5]):
+            all_sprites.add(testenemy)
         player.move(key)
-        player.shoot(len(bullets),key,player.box.center,bullets)
+        player.shoot(len(bullets),key,player.rect.center,bullets)
 
         # movement of other entities
         for bullet in bullets:
             all_sprites.add(bullet)
             bullet.move()
-            print(bullet.hitbox.center,bullet.rect.center)
         #draw
 
         all_sprites.draw(screen)
