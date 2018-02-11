@@ -7,16 +7,17 @@ class Body(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
         super().__init__()
 
-        self.hitbox = pygame.Rect(kwargs.get("start_pos",(0,0)),kwargs.get("size",(1,1)))
+        self.hitbox = pygame.Rect(kwargs.get("start_pos",(0,0)),kwargs.get("size",(61,54)))
 
 class Player(Body):
     def __init__(self, **kwargs):
         Body.__init__(self,**kwargs)
         self.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
-        self.rect = self.image.get_rect()
+        #pygame.draw.rect(self.image,white,self.hitbox)
 
+        self.rect = self.image.get_rect()
+        self.rect.center = self.hitbox.center
         self.rect.center = (width / 2, height / 2)
-        pygame.draw.rect(self.image,white,self.hitbox)
         self.shoot_timer = 60/6
 
 
@@ -52,8 +53,11 @@ class Player(Body):
 
     def is_hit(self):
         for thing in bullets:
-            if thing is EnemyBullet and self.hitbox.colliderect(thing.hitbox):
-                del bullets[bullets.index(thing)]
+            if thing is EnemyBullet and self.rect.colliderect(thing.rect):
+
+                all_sprites.remove(thing)
+                bullets.remove(thing)
+                self.image = pygame.image.load(os.path.join("resources", "GOLDDEAD.png")).convert_alpha()
                 # player needs to die or lose a life
                 # explosion animation
         for enemy in enemies:
@@ -61,12 +65,19 @@ class Player(Body):
                 # me ded
                 pass
 
+    def collision(self):
+        for thing in enemies:
+            if self.rect.colliderect(thing.rect):
+                self.image = pygame.image.load(os.path.join("resources","GOLDDEAD.png")).convert_alpha()
+
+
 class Enemy(Body):
     def __init__(self, **kwargs):
         Body.__init__(self,**kwargs)
         self.image = pygame.image.load(os.path.join("resources", "BAD.png")).convert_alpha()
-        pygame.draw.rect(self.image, white, self.hitbox)
+        #pygame.draw.rect(self.image, white, self.hitbox)
         self.rect = self.image.get_rect()
+        self.rect.center = kwargs.get("start_pos",(0,0))
         enemies.append(self)
         self.pattern = 1
         self.t = 0
@@ -80,10 +91,15 @@ class Enemy(Body):
 
     def is_hit(self):
         for thing in bullets:
-            if thing is PlayerBullet and self.hitbox.colliderect(thing.hitbox):
+            if thing.players and self.rect.colliderect(thing.rect):
+                all_sprites.remove(self)
                 enemies.remove(self)
+                all_sprites.remove(thing)
                 bullets.remove(thing)
-  
+
+    def move(self):
+        pass
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self,**kwargs):
         super().__init__()
@@ -95,16 +111,17 @@ class PlayerBullet(Bullet):
     def __init__(self,**kwargs):
         Bullet.__init__(self,**kwargs)
         self.image = pygame.image.load(os.path.join("resources","GoodBullet.png")).convert_alpha()
-        pygame.draw.rect(self.image,white,self.hitbox)
+        #pygame.draw.rect(self.image,white,self.hitbox)
         self.rect = self.image.get_rect()
         self.rect.center = self.hitbox.center
-        self.flag = "player's"
+        self.players = True
 
     def move(self):
         if self.rect.bottom >= 0 and self.hitbox.bottom >=0:
             self.rect.move_ip(0,-self.speed)
             self.hitbox.move_ip(0,-self.speed)
         else:
+            all_sprites.remove(self)
             bullets.remove(self)
 
 class EnemyBullet(Bullet):
@@ -121,4 +138,5 @@ class EnemyBullet(Bullet):
             self.rect.move_ip(0,-self.speed)
             self.hitbox.move_ip(0,-self.speed)
         else:
+            all_sprites.remove(self)
             bullets.remove(self)

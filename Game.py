@@ -1,5 +1,6 @@
 from math import *
 import pygame,os
+import random
 from entities import *
 from globalvars import *
 
@@ -21,13 +22,8 @@ if __name__ == '__main__':
     pygame.display.set_caption("game")
     background = Background(os.path.join("resources","Background.png"),(0,0))
 
-    clock = pygame.time.Clock()
     player = Player()
-    testenemy = Enemy(start_pos=(width/2,height/2), size=(1,1))
 
-    enemies.append(testenemy)
-
-    all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
 
     while running:
@@ -36,7 +32,7 @@ if __name__ == '__main__':
         screen.fill(white)
         screen.blit(background.image,background.rect)
         #print(bullets)
-
+        player.collision()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -45,7 +41,7 @@ if __name__ == '__main__':
         # basic movement
         key = pygame.key.get_pressed()
         if (key[pygame.K_5]):
-            all_sprites.add(testenemy)
+            all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,height))))
 
         player.move(key)
 
@@ -53,6 +49,7 @@ if __name__ == '__main__':
         if player.shoot_timer:
             player.shoot_timer -= 1
         if pygame.key.get_pressed()[pygame.K_z]:
+
             if not player.shoot_timer:
                 player.shoot(player.rect.center, bullets)
                 player.shoot_timer = 60/6
@@ -65,8 +62,10 @@ if __name__ == '__main__':
 
         for enemy in enemies:
             enemy.move()
+            enemy.is_hit()
         
         #draw
+        print(len(enemies),len(bullets),len(all_sprites),player.rect.center)
         all_sprites.draw(screen)
         pygame.display.flip()
 
