@@ -18,7 +18,7 @@ if __name__ == '__main__':
     os.environ["SDL_VIDEO_CENTERED"] = "1" #center the window to the center of the screen.
     pygame.init()
     running = True
-
+    font = pygame.font.SysFont("Times New Roman",35)
 
 
     screen = pygame.display.set_mode((width,height))
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     player = Player()
 
     all_sprites.add(player)
+    scoreDisplay = font.render(str(score),1,white)
 
     while running:
 
@@ -41,7 +42,6 @@ if __name__ == '__main__':
         screen.fill(white)
         screen.blit(background.image,background.rect)
         player.collision()
-
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -54,6 +54,7 @@ if __name__ == '__main__':
         if (key[pygame.K_5]):
             all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,2*height//3))))
 
+        screen.blit(scoreDisplay,(0,0))
         player.move(key)
 
         player.move(pygame.key.get_pressed())

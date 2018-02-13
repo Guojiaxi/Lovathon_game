@@ -106,7 +106,8 @@ class Enemy(Body):
                 enemies.remove(self)
                 all_sprites.remove(thing)
                 bullets.remove(thing)
-
+                score += 1
+                
     def shoot(self,currentpos,target):
         bullets.append(EnemyBullet(start_pos=currentpos,speed = 50,target=target))
         
