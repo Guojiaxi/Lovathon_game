@@ -27,6 +27,7 @@ class Player(Body):
         self.rect.center = (width / 2, height / 2)
         self.dead = False
         self.shoot_timer = FPS/self.shoot_speed
+        self.score = 0
 
 
     def move(self,key):
@@ -97,14 +98,14 @@ class Enemy(Body):
         self.rect.move_ip(0, dy)
         self.t += (-1)**self.nature
 
-    def is_hit(self):
+    def is_hit(self,player):
         for thing in bullets:
             if thing.players and self.rect.colliderect(thing.rect):
                 all_sprites.remove(self)
                 enemies.remove(self)
                 all_sprites.remove(thing)
                 bullets.remove(thing)
-                score += 1
+                player.score += 1
                 
     def shoot(self,currentpos,target):
         bullets.append(EnemyBullet(start_pos=currentpos,speed = 50,target=target))

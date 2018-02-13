@@ -36,7 +36,6 @@ if __name__ == '__main__':
     player = Player()
 
     all_sprites.add(player)
-    scoreDisplay = font.render(str(score),1,white)
 
     while running:
 
@@ -53,7 +52,7 @@ if __name__ == '__main__':
 
         if (pygame.key.get_pressed()[pygame.K_5]):
             all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,2*height//3))))
-
+        scoreDisplay = font.render(str(player.score), 1, white)
         screen.blit(scoreDisplay,(0,0))
 
         player.move(pygame.key.get_pressed())
@@ -70,7 +69,7 @@ if __name__ == '__main__':
 
         for enemy in enemies:
             enemy.move()
-            enemy.is_hit()
+            enemy.is_hit(player)
 
         for enemy in enemies:
             if enemy.shoot_timer:
@@ -78,7 +77,8 @@ if __name__ == '__main__':
             else:
                 enemy.shoot(enemy.rect.center, player.rect.center)
                 enemy.shoot_timer = 120/1
-        
+
+
         #draw
         if player.dead:
             background = Background(os.path.join("resources","GAMEOVER.png"),(0,0))
