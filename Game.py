@@ -40,7 +40,6 @@ if __name__ == '__main__':
         clock.tick(60)
         screen.fill(white)
         screen.blit(background.image,background.rect)
-        #print(bullets)
         player.collision()
 
 
@@ -81,10 +80,9 @@ if __name__ == '__main__':
                 enemy.shoot_timer -= 1
             else:
                 enemy.shoot(enemy.rect.center, player.rect.center)
-                enemy.shoot_timer = 60/6
+                enemy.shoot_timer = 120/1
         
         #draw
-        print(len(enemies),len(bullets),len(all_sprites),player.rect.center)
         if player.dead:
             background = Background(os.path.join("resources","GAMEOVER.png"),(0,0))
             screen.blit(background.image, background.rect)

@@ -1,4 +1,4 @@
-import pygame,os,random
+import pygame,os,random,math
 from globalvars import *
 from math import *
 from move_patterns import *
@@ -87,7 +87,7 @@ class Enemy(Body):
         #pygame.draw.rect(self.image, white, self.hitbox)
         self.rect = self.image.get_rect()
         self.rect.center = kwargs.get("start_pos",(0,0))
-        self.shoot_timer = 60/3
+        self.shoot_timer = 120/1
         enemies.append(self)
         self.pattern = random.randint(1,len(move_pat))
         self.t = 0
@@ -145,11 +145,9 @@ class EnemyBullet(Bullet):
         self.rect.center = self.hitbox.center
         self.players = False
 
-        self.x_slope = self.target[0] - self.rect.center[0]
-        self.y_slope = self.target[1] - self.rect.center[1]
-        max_factor = max(self.x_slope,self.y_slope)
-        self.x_slope /= max_factor
-        self.y_slope /= max_factor
+        self.x_slope = self.rect.center[0] - self.target[0]
+        self.y_slope = self.rect.center[1] - self.target[1]
+        self.norm = math.sqrt(self.x_slope**2 + self.y_slope**2)
         #self.slope = self.y_slope/self.x_slope
         #self.angle = atan(self.slope)
 
@@ -157,7 +155,7 @@ class EnemyBullet(Bullet):
         if self.rect.bottom >= 0 and self.rect.top <= height and self.rect.left >=0 and self.rect.right <= width:
             #self.rect.move_ip(0,-self.speed)
             #self.hitbox.move_ip(0,-self.speed)
-            self.rect.move_ip(self.speed*self.x_slope,self.speed*self.y_slope)
+            self.rect.move_ip(-(self.x_slope*self.speed)/self.norm,-(self.y_slope*self.speed)/self.norm)
         else:
             all_sprites.remove(self)
             bullets.remove(self)
