@@ -1,6 +1,8 @@
 
 from move_patterns import *
 import pygame
+
+FPS = 60
 width = 800
 height = 608
 clock = pygame.time.Clock()

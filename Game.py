@@ -13,6 +13,9 @@ def wait():
             if event.type == pygame.KEYDOWN:
                 return
 
+def spawn():
+    all_sprites.add(Enemy(start_pos=(random.randint(0, width), random.randint(0, 2 * height // 3))))
+
 if __name__ == '__main__':
 
     os.environ["SDL_VIDEO_CENTERED"] = "1" #center the window to the center of the screen.
@@ -37,7 +40,7 @@ if __name__ == '__main__':
 
     while running:
 
-        clock.tick(60)
+        clock.tick(FPS)
         screen.fill(white)
         screen.blit(background.image,background.rect)
         player.collision()
@@ -47,24 +50,17 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
 
-
         # basic movement
-        key = pygame.key.get_pressed()
 
-        if (key[pygame.K_5]):
+        if (pygame.key.get_pressed()[pygame.K_5]):
             all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,2*height//3))))
 
-        player.move(key)
-
         player.move(pygame.key.get_pressed())
-        if player.shoot_timer:
-            player.shoot_timer -= 1
+
         if pygame.key.get_pressed()[pygame.K_z]:
-
-            if not player.shoot_timer:
-                player.shoot(player.rect.center, bullets)
-                player.shoot_timer = 60/6
-
+            player.shoot(player.rect.center, bullets)
+        else:
+            player.shoot_timer = 0
 
         # movement of other entities
         for bullet in bullets:

@@ -21,12 +21,12 @@ class Player(Body):
         Body.__init__(self,**kwargs)
         self.image = pygame.image.load(os.path.join("resources","GOLD.png")).convert_alpha()
         #pygame.draw.rect(self.image,white,self.hitbox)
-
+        self.shoot_speed = 6
         self.rect = self.image.get_rect()
         self.rect.center = self.hitbox.center
         self.rect.center = (width / 2, height / 2)
         self.dead = False
-        self.shoot_timer = 60/6
+        self.shoot_timer = FPS/self.shoot_speed
 
 
     def move(self,key):
@@ -57,7 +57,11 @@ class Player(Body):
             self.rect.move_ip(0, dy)
 
     def shoot(self,current_position,bullets):
-        bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+        if self.shoot_timer:
+            self.shoot_timer -= 1
+        else:
+            bullets.append(PlayerBullet(start_pos=(current_position[0]-3,current_position[1]-30), speed=15))
+            self.shoot_timer = FPS/self.shoot_speed
 
     def is_hit(self):
         for thing in bullets:
