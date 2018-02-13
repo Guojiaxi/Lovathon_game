@@ -64,6 +64,11 @@ class Player(Body):
             self.shoot_timer = FPS/self.shoot_speed
 
     def is_hit(self):
+        for thing in enemies:
+            if self.rect.colliderect(thing.rect):
+                self.image = pygame.image.load(os.path.join("resources","GOLDDEAD.png")).convert_alpha()
+                self.dead = True
+
         for thing in bullets:
             if self.rect.colliderect(thing.rect):
 
@@ -72,17 +77,6 @@ class Player(Body):
                 self.image = pygame.image.load(os.path.join("resources", "GOLDDEAD.png")).convert_alpha()
                 # player needs to die or lose a life
                 # explosion animation
-        for enemy in enemies:
-            if self.hitbox.colliderect(enemy.hitbox):
-                # me ded
-                pass
-
-    def collision(self):
-        for thing in enemies:
-            if self.rect.colliderect(thing.rect):
-                self.image = pygame.image.load(os.path.join("resources","GOLDDEAD.png")).convert_alpha()
-                self.dead = True
-
 
 class Enemy(Body):
     def __init__(self, **kwargs):

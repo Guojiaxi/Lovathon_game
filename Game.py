@@ -23,7 +23,6 @@ if __name__ == '__main__':
     running = True
     font = pygame.font.SysFont("Times New Roman",35)
 
-
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption("game")
     background = Background(os.path.join("resources","Bloodinmyheart.png"),(0,0))
@@ -44,7 +43,7 @@ if __name__ == '__main__':
         clock.tick(FPS)
         screen.fill(white)
         screen.blit(background.image,background.rect)
-        player.collision()
+        player.is_hit()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
