@@ -52,6 +52,7 @@ if __name__ == '__main__':
 
         if (pygame.key.get_pressed()[pygame.K_5]):
             all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,2*height//3))))
+            
         scoreDisplay = font.render(str(player.score), 1, white)
         screen.blit(scoreDisplay,(0,0))
 
