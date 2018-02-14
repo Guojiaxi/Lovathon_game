@@ -23,7 +23,7 @@ class Player(Body):
         #pygame.draw.rect(self.image,white,self.hitbox)
         self.shoot_speed = 6
         self.rect = self.image.get_rect()
-        self.rect.center = self.hitbox.center
+        # self.rect.center = self.hitbox.center
         self.rect.center = (width / 2, height / 2)
         self.dead = False
         self.shoot_timer = FPS/self.shoot_speed

@@ -1,5 +1,5 @@
 from math import *
-import pygame,os
+import pygame,os,sys
 import random
 from entities import *
 from globalvars import *
@@ -13,7 +13,7 @@ def wait():
             if event.type == pygame.KEYDOWN:
                 return
 
-def spawn():
+def spawn_enemy():
     all_sprites.add(Enemy(start_pos=(random.randint(0, width), random.randint(0, 2 * height // 3))))
 
 if __name__ == '__main__':
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     background = Background(os.path.join("resources","Background.png"),(0,0))
 
     player = Player()
+    spawn_timer = FPS*3
 
     all_sprites.add(player)
 
@@ -50,8 +51,6 @@ if __name__ == '__main__':
 
         # basic movement
 
-        if (pygame.key.get_pressed()[pygame.K_5]):
-            all_sprites.add(Enemy(start_pos=(random.randint(0,width),random.randint(0,2*height//3))))
         scoreDisplay = font.render(str(player.score), 1, white)
         screen.blit(scoreDisplay,(0,0))
 
@@ -63,6 +62,12 @@ if __name__ == '__main__':
             player.shoot_timer = 0
 
         # movement of other entities
+        if spawn_timer:
+            spawn_timer -= 1
+        else:
+            spawn_enemy()
+            spawn_timer = FPS*random.randint(0,4)
+
         for bullet in bullets:
             all_sprites.add(bullet)
             bullet.move()
@@ -77,7 +82,6 @@ if __name__ == '__main__':
             else:
                 enemy.shoot(enemy.rect.center, player.rect.center)
                 enemy.shoot_timer = 120/1
-
 
         #draw
         if player.dead:
