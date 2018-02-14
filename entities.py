@@ -72,11 +72,10 @@ class Player(Body):
 
         for thing in bullets:
             if self.rect.colliderect(thing.rect):
-
                 all_sprites.remove(thing)
                 bullets.remove(thing)
                 self.image = pygame.image.load(os.path.join("resources", "GOLDDEAD.png")).convert_alpha()
-                # player needs to die or lose a life
+                self.dead = True
                 # explosion animation
 
 class Enemy(Body):
